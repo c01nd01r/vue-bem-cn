@@ -2,14 +2,14 @@
 [![Travis](https://travis-ci.org/c01nd01r/vue-bem-cn.svg?branch=master)](https://travis-ci.org/c01nd01r/vue-bem-cn/)
 [![npm](https://img.shields.io/npm/v/vue-bem-cn.svg)](https://www.npmjs.com/package/vue-bem-cn)
 
-Simple BEM-style class name generator for Vue.JS, based on [bem-cn-lite](https://github.com/mistakster/bem-cn-lite)
+Simple [BEM](http://getbem.com/)-style class name generator for Vue.JS, based on [bem-cn-lite](https://github.com/mistakster/bem-cn-lite)
 
 
 ## Table of Contents
 
 * [Quick example](#quick-example)
 * [Installation](#installation)
-* [Usage](#Usage)
+* [Usage](#usage)
 * [API](#api)
 
 ## Quick example
@@ -38,11 +38,11 @@ Using **btn** block in App.vue:
 
 ```vue
 <script>
-import Btn from 'components/btn.vue';
+  import Btn from 'components/btn.vue';
 
-export default {
-  components: { Btn },
-}
+  export default {
+    components: { Btn },
+  }
 </script>
 
 <template>
@@ -221,36 +221,36 @@ Mix class names to block/element.
 
 * with vue-bem-cn in your component:
 
-  ```vue
-  <script>
-    export default {
-      name: 'btn',
-    }
-  </script>
+```vue
+<script>
+  export default {
+    name: 'btn',
+  }
+</script>
 
-  <template>
-    <div>
-      <div :class="b(false, 'block-mixin')"> DIV tag will receive 'btn block-mixin' class name </div>
-      <div :class="b('text', 'element-mixin')"> DIV tag will receive 'btn__text element-mixin' class name </div>
-    </div>
-  </template>
-  ```
+<template>
+  <div>
+    <div :class="b(false, 'block-mixin')"> DIV tag will receive 'btn block-mixin' class name </div>
+    <div :class="b('text', 'element-mixin')"> DIV tag will receive 'btn__text element-mixin' class name </div>
+  </div>
+</template>
+```
 
 * with Vue class attribute in parent component:
 
-  ```vue
-  <script>
-    import Btn from 'components/Btn.vue';
+```vue
+<script>
+  import Btn from 'components/Btn.vue';
 
-    export  default {
-      name: 'form',
-      components: { Btn },
-    }
-  </script>
+  export  default {
+    name: 'form',
+    components: { Btn },
+  }
+</script>
 
-  <template>
-    <form :class="b()">
-      <btn :class="b('button')"> Btn root tag will receive 'form__button btn' class name </btn>
-    </form>
-  </template>
-  ```
+<template>
+  <form :class="b()">
+    <btn :class="b('button')"> Btn root tag will receive 'form__button btn' class name </btn>
+  </form>
+</template>
+```
