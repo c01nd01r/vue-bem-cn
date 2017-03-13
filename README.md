@@ -2,7 +2,7 @@
 [![Travis](https://travis-ci.org/c01nd01r/vue-bem-cn.svg?branch=master)](https://travis-ci.org/c01nd01r/vue-bem-cn/)
 [![npm](https://img.shields.io/npm/v/vue-bem-cn.svg)](https://www.npmjs.com/package/vue-bem-cn)
 
-Simple [BEM](http://getbem.com/)-style class name generator for Vue.JS, based on [bem-cn-lite](https://github.com/mistakster/bem-cn-lite)
+Simple [BEM](http://getbem.com/)-style class name generator for Vue.JS 2.*, based on [bem-cn-lite](https://github.com/mistakster/bem-cn-lite)
 
 
 ## Table of Contents
