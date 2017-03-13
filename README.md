@@ -1,6 +1,7 @@
 #  vue-bem-cn
 [![Travis](https://travis-ci.org/c01nd01r/vue-bem-cn.svg?branch=master)](https://travis-ci.org/c01nd01r/vue-bem-cn/)
 [![npm](https://img.shields.io/npm/v/vue-bem-cn.svg)](https://www.npmjs.com/package/vue-bem-cn)
+[![vue-version](https://img.shields.io/badge/Vue.JS-2.+-brightgreen.svg)](https://github.com/vuejs/vue/)
 
 Simple [BEM](http://getbem.com/)-style class name generator for Vue.JS 2.*, based on [bem-cn-lite](https://github.com/mistakster/bem-cn-lite)
 
