@@ -1,9 +1,8 @@
 {
   "name": "vue-bem-cn",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "BEM class name generator for Vue.JS",
   "main": "dist/vue-bem-cn.common.js",
-  "module": "src/index.js",
   "scripts": {
     "test": "npm run build:umd && NODE_ENV=production node_modules/karma/bin/karma start ./test/karma.conf.js",
     "build": "npm run build:babel && npm run build:umd && npm run build:umd:min",
