@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/vue-bem-cn.svg)](https://www.npmjs.com/package/vue-bem-cn)
 [![vue-version](https://img.shields.io/badge/Vue.JS-2.+-brightgreen.svg)](https://github.com/vuejs/vue/)
 
-Simple [BEM](http://getbem.com/)-style class name generator for Vue.JS 2.*, based on [bem-cn-lite](https://github.com/mistakster/bem-cn-lite)
+Simple [BEM](http://getbem.com/)-style class name generator for Vue.JS 2.*
 
 
 ## Table of Contents
@@ -16,18 +16,18 @@ Simple [BEM](http://getbem.com/)-style class name generator for Vue.JS 2.*, base
 ## Quick example
 Live demo: [codepen](http://codepen.io/c01nd01r/pen/Qdeovv)
 
-Block **btn**. Vue [Single File Component](https://vuejs.org/v2/guide/single-file-components.html):
+Block **ui-button**. Vue [Single File Component](https://vuejs.org/v2/guide/single-file-components.html):
 ```vue
 <script>
   export default {
-    name: 'btn', // set BEM block name
+    name: 'ui-button', // set block name
     props: ['size', 'look', 'type', 'icon'],
   }
 </script>
 
 <template>
   <button :class="b({ size, look })" :type="type">
-    <span :class="b('text', {look})">
+    <span :class="b('text', { look })">
       <i v-if="icon" :class="b('icon', { icon })"> 👍 </i>
       <slot></slot>
     </span>
@@ -35,20 +35,22 @@ Block **btn**. Vue [Single File Component](https://vuejs.org/v2/guide/single-fil
 </template>
 ```
 
-Using **btn** block in App.vue:
+Using **ui-button** block in App.vue:
 
 ```vue
 <script>
-  import Btn from 'components/btn.vue';
+  import Button from 'components/UI/Button.vue';
 
   export default {
-    components: { Btn },
+    components: {
+      'ui-button': Button
+    },
   }
 </script>
 
 <template>
   <div class="example">
-    <btn type="button" class="mix-any-class" size="large" look="primary" icon="emoji"> I am BEM button! </btn>
+    <ui-button type="button" class="mix-any-class" size="large" look="primary" icon="emoji"> I am BEM button! </ui-button>
   </div>
 </template>
 
@@ -58,9 +60,9 @@ Will be compile to:
 
 ```html
 <div class="example">
- <button class="mix-any-class btn btn--size-large btn--look-primary" type="button">
-    <span class="btn__text btn__text--look-primary">
-    <i class="btn__icon btn__icon--icon-emoji">👍 </i>
+ <button class="mix-any-class ui-button ui-button--size-large ui-button--look-primary" type="button">
+    <span class="ui-button__text ui-button__text--look-primary">
+    <i class="ui-button__icon ui-button__icon--icon-emoji">👍 </i>
       I am BEM button!
     </span>
   </button>
@@ -102,17 +104,17 @@ The Block name will be receive from `name` field of component or `block` field:
 ```vue
 <script>
   export default {
-    name: 'btn',
+    name: 'ui-button',
   }
 </script>
 
 <template>
-  <div :class="b()"> DIV tag will receive 'btn' class name </div>
+  <div :class="b()"> DIV tag will receive 'ui-button' class name </div>
 </template>
 ```
 More examples in [API section](#api)
 
-After component initialization (`created` lifecycle hook), every component, that has data in `name` or `block` fields recive  `b()` method.
+After component initialization (`created` lifecycle hook), every component, that has `string` in `name` or `block` fields recive  `b()` method.
 Also, you can call `this.b()` method in your component, if you need it.
 
 ### Q: What if I don't want to use `name` field for Block name? And what is `block` field ?
@@ -122,8 +124,8 @@ If you want, you can use `block` field instead of `name`, but keep in mind, **`b
 ```vue
 <script>
 export default {
-  name: 'btn',
-  block: 'bem-button', // prefer then `name: 'btn'`
+  name: 'ui-button',
+  block: 'bem-button', // prefer then `name: 'ui-button'`
 }
 </script>
 
@@ -136,24 +138,57 @@ export default {
 
 No problem. You can set your settings object with `Vue.use()` as second argument:
 
-```vue
-<script>
+```js
   import Vue from 'vue';
   import vueBemCn from 'vue-be-cn';
 
-  // default settings
+  // default delimiters settings
   const bemConfig = {
-    ns: '', // namespace
-    el: '__', // element delimeter
-    mod: '--', // modifier delimeter
-    modValue: '-', // value delimeter for modifier
+    delimiters: {
+      ns: '', // namespace
+      el: '__', // element delimeter
+      mod: '--', // modifier delimeter
+      modVal: '-', // value delimeter for modifier
+    }
   }
 
   Vue.use(vueBemCn, bemConfig);
 
   new Vue({...});
+```
 
-</script>
+### Q: I will want use another name for `b` method.
+
+Just change `methodName` option in config:
+
+```js
+  import Vue from 'vue';
+  import vueBemCn from 'vue-be-cn';
+
+  const bemConfig = {
+    methodName: 'bem',
+  }
+
+  Vue.use(vueBemCn, bemConfig);
+
+  new Vue({...});
+```
+
+### Q: What about converting camelCase to kebab-case?
+
+Check `hyphenate` option:
+
+```js
+  import Vue from 'vue';
+  import vueBemCn from 'vue-be-cn';
+
+  const bemConfig = {
+    hyphenate: true,
+  }
+
+  Vue.use(vueBemCn, bemConfig);
+
+  new Vue({...});
 ```
 
 ## API
@@ -164,12 +199,12 @@ Generate block name.
 ```vue
 <script>
   export default {
-    name: 'btn',
+    name: 'ui-button',
   }
 </script>
 
 <template>
-  <div :class="b()"> DIV tag will receive 'btn' class name </div>
+  <div :class="b()"> DIV tag will receive 'ui-button' class name </div>
 </template>
 ```
 
@@ -179,12 +214,12 @@ Generate modifier of block name.
 ```vue
 <script>
   export default {
-    name: 'btn',
+    name: 'ui-button',
   }
 </script>
 
 <template>
-  <div :class="b({size: 'large'})"> DIV tag will receive 'btn btn--size-large' class name </div>
+  <div :class="b({ size: 'large' })"> DIV tag will receive 'ui-button ui-button--size-large' class name </div>
 </template>
 ```
 
@@ -194,12 +229,12 @@ Generate element of block name.
 ```vue
 <script>
   export default {
-    name: 'btn',
+    name: 'ui-button',
   }
 </script>
 
 <template>
-  <div :class="b('text')"> DIV tag will receive 'btn__text' </div>
+  <div :class="b('text')"> DIV tag will receive 'ui-button__text' </div>
 </template>
 ```
 ### Modifier of Element
@@ -208,12 +243,12 @@ Generate modifier of element name.
 ```vue
 <script>
   export default {
-    name: 'btn',
+    name: 'ui-button',
   }
 </script>
 
 <template>
-  <div :class="b('text', {look: primary})"> DIV tag will receive 'btn__text btn__text--look-primary' class name </div>
+  <div :class="b('text', { look: 'primary' })"> DIV tag will receive 'ui-button__text ui-button__text--look-primary' class name </div>
 </template>
 ```
 
@@ -225,14 +260,14 @@ Mix class names to block/element.
 ```vue
 <script>
   export default {
-    name: 'btn',
+    name: 'ui-button',
   }
 </script>
 
 <template>
   <div>
-    <div :class="b(false, 'block-mixin')"> DIV tag will receive 'btn block-mixin' class name </div>
-    <div :class="b('text', 'element-mixin')"> DIV tag will receive 'btn__text element-mixin' class name </div>
+    <div :class="b(false, 'block-mixin')"> DIV tag will receive 'ui-button block-mixin' class name </div>
+    <div :class="b('text', 'element-mixin')"> DIV tag will receive 'ui-button__text element-mixin' class name </div>
   </div>
 </template>
 ```
@@ -241,17 +276,56 @@ Mix class names to block/element.
 
 ```vue
 <script>
-  import Btn from 'components/Btn.vue';
+  import Button from 'components/UI/Button.vue';
 
   export  default {
     name: 'form',
-    components: { Btn },
+    components: {
+      'ui-button': Button
+    },
   }
 </script>
 
 <template>
   <form :class="b()">
-    <btn :class="b('button')"> Btn root tag will receive 'form__button btn' class name </btn>
+    <ui-button :class="b('button')"> ui-button root tag will receive 'form__button ui-button' class name </ui-button>
   </form>
 </template>
+```
+
+### Default settings
+
+```js
+{
+  hyphenate: false,
+  methodName: 'b',
+  delimiters: {
+    ns: '',
+    el: '__',
+    mod: '--',
+    modVal: '-'
+  }
+}
+```
+
+* `hyphenate: boolean` - hyphenation the resulting class name
+```js
+// { hyphenate: true }
+
+b({ hasFocus: true }) // block--has-focus
+```
+
+* `methodName: string` - name of the method for generating the class name
+```js
+// { methodName: 'bem' }
+
+b('elem') // [Vue warn]: Property or method "b" is not defined...
+bem('elem') // block__elem
+```
+
+* `delimiters: Object<string>` - delimiters for BEM entities
+```js
+// { delimiters: { ns: 'b-', modVal: '_'} }
+
+b({ mod: 'val' }) // b-block b-block--mod_val
 ```
