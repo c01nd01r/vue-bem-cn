@@ -6,10 +6,7 @@ notifications:
   email: false
 node_js:
   - '8'
-before_script:
-  - npm prune
 script:
-  - yarn
   - yarn run build
   - yarn run test
 branches:
