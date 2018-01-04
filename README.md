@@ -140,7 +140,7 @@ No problem. You can set your settings object with `Vue.use()` as second argument
 
 ```js
   import Vue from 'vue';
-  import vueBemCn from 'vue-be-cn';
+  import vueBemCn from 'vue-bem-cn';
 
   // default delimiters settings
   const bemConfig = {
@@ -163,7 +163,7 @@ Just change `methodName` option in config:
 
 ```js
   import Vue from 'vue';
-  import vueBemCn from 'vue-be-cn';
+  import vueBemCn from 'vue-bem-cn';
 
   const bemConfig = {
     methodName: 'bem',
@@ -180,7 +180,7 @@ Check `hyphenate` option:
 
 ```js
   import Vue from 'vue';
-  import vueBemCn from 'vue-be-cn';
+  import vueBemCn from 'vue-bem-cn';
 
   const bemConfig = {
     hyphenate: true,
