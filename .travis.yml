@@ -5,13 +5,10 @@ cache:
 notifications:
   email: false
 node_js:
-  - '7'
-  - '6'
-  - '4'
-before_script:
-  - npm prune
+  - '8'
 script:
-  - npm run test
+  - yarn run build
+  - yarn run test
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/

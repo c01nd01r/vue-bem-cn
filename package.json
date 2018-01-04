@@ -1,15 +1,13 @@
 {
   "name": "vue-bem-cn",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "BEM class name generator for Vue.JS",
-  "main": "dist/vue-bem-cn.common.js",
+  "main": "dist/vue-bem-cn.umd.min.js",
+  "module": "dist/vue-bem-cn.es6.js",
   "scripts": {
-    "test": "npm run build:umd && NODE_ENV=production node_modules/karma/bin/karma start ./test/karma.conf.js",
-    "build": "npm run build:babel && npm run build:umd && npm run build:umd:min",
-    "build:babel": "babel src/index.js --out-file dist/vue-bem-cn.common.js --ignore webpack.umd.js -s",
-    "build:umd": "webpack --config webpack.config.babel.js --output-filename vue-bem-cn.umd.js",
-    "build:umd:min": "webpack -p --config webpack.config.babel.js --output-filename vue-bem-cn.umd.min.js",
-    "prebuild": "rm -rf ./dist && mkdir dist"
+    "build": "yarn run prebuild && NODE_ENV=build node rollup.config.js",
+    "prebuild": "rimraf dist/",
+    "test": "jest tests/ --config jest.config.json"
   },
   "repository": {
     "type": "git",
@@ -17,7 +15,6 @@
   },
   "files": [
     "dist/",
-    "src/index.js",
     "README.md"
   ],
   "keywords": [
@@ -35,31 +32,25 @@
     "url": "https://github.com/c01nd01r/vue-bem-cn/issues"
   },
   "homepage": "https://github.com/c01nd01r/vue-bem-cn#readme",
-  "dependencies": {
-    "bem-cn-lite": "^3.0.0"
-  },
   "devDependencies": {
-    "babel-cli": "^6.23.0",
-    "babel-core": "^6.22.1",
-    "babel-loader": "^6.2.10",
-    "babel-plugin-transform-runtime": "^6.22.0",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-stage-2": "^6.22.0",
-    "chai": "^3.5.0",
-    "eslint": "^3.15.0",
-    "eslint-config-airbnb-base": "^11.1.0",
-    "eslint-friendly-formatter": "^2.0.7",
-    "eslint-loader": "^1.6.1",
-    "eslint-plugin-chai-expect": "^1.1.1",
-    "eslint-plugin-import": "^2.2.0",
-    "karma": "^1.4.0",
-    "karma-chai": "^0.1.0",
-    "karma-mocha": "^1.3.0",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-webpack": "^2.0.2",
-    "mocha": "^3.2.0",
-    "vue": "^2.2.0",
-    "webpack": "^2.2.1"
+    "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "jest": "^21.2.1",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.51.7",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-filesize": "^1.4.2",
+    "rollup-plugin-progress": "^0.4.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "vue": "^2.5.9",
+    "vue-template-compiler": "^2.5.9",
+    "vue-test-utils": "^1.0.0-beta.6"
   },
   "peerDependencies": {
     "vue": "^2.0.0"
