@@ -81,7 +81,7 @@ function bemNames(entitys, delimiters) {
       /* eslint-disable no-param-reassign */
       if (val === true) {
         prev += ' ' + resultString + delims.mod + name;
-      } else if (isString(val)) {
+      } else if (isString(val) || typeof val === 'number') {
         prev += ' ' + resultString + delims.mod + name + delims.modVal + names.mods[name];
       }
       /* eslint-enable no-param-reassign */
