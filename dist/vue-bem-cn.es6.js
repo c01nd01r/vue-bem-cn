@@ -48,6 +48,9 @@ var isPObject = function isPObject(val) {
 var hyphenate = function hyphenate(str) {
   return str.replace(/\B([A-Z])/g, '-$1').toLowerCase();
 };
+var isNumber = function isNumber(val) {
+  return typeof val === 'number' && isFinite(val);
+};
 
 /**
  * Create String from BEM entitys
@@ -81,7 +84,7 @@ function bemNames(entitys, delimiters) {
       /* eslint-disable no-param-reassign */
       if (val === true) {
         prev += ' ' + resultString + delims.mod + name;
-      } else if (isString(val) || typeof val === 'number') {
+      } else if (isString(val) || isNumber(val)) {
         prev += ' ' + resultString + delims.mod + name + delims.modVal + names.mods[name];
       }
       /* eslint-enable no-param-reassign */

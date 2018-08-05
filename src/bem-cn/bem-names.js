@@ -1,4 +1,4 @@
-import { isPObject, isString } from '../utils';
+import { isPObject, isString, isNumber } from '../utils';
 
 /**
  * Create String from BEM entitys
@@ -33,7 +33,7 @@ export default function bemNames(entitys, delimiters) {
       /* eslint-disable no-param-reassign */
       if (val === true) {
         prev += ' ' + resultString + delims.mod + name;
-      } else if (isString(val) || typeof(val) === 'number') {
+      } else if (isString(val) || isNumber(val)) {
         prev += ' ' + resultString + delims.mod + name + delims.modVal + names.mods[name];
       }
       /* eslint-enable no-param-reassign */
