@@ -1,9 +1,6 @@
 import { blocks, elements, delimiters, delimitersTest } from './testingEntitys';
 import bemNames from '../src/bem-cn/bem-names';
 
-const block = 'button';
-const el = 'title';
-
 describe('Block', () => {
   Object.keys(blocks).forEach((item) => {
     test(item, () => {

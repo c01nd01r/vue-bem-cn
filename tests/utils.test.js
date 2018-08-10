@@ -1,4 +1,4 @@
-import { isString, isPObject, hyphenate } from '../src/utils';
+import { isString, isPObject, hyphenate, isNumber } from '../src/utils';
 
 describe('isString', () => {
   test('Expected false for undefined', () => {
@@ -13,8 +13,38 @@ describe('isString', () => {
     expect(isString({})).not.toBeTruthy();
   });
 
+  test('Expected false for bool', () => {
+    expect(isNumber(false)).not.toBeTruthy();
+  });
+
   test('Expected true for string', () => {
     expect(isString('Hello!')).toBeTruthy();
+  });
+});
+
+describe('isNumber', () => {
+  test('Expected false for NaN', () => {
+    expect(isNumber(NaN)).not.toBeTruthy();
+  });
+
+  test('Expected false for undefined', () => {
+    expect(isString(undefined)).not.toBeTruthy();
+  });
+
+  test('Expected false for string', () => {
+    expect(isNumber('qwerty')).not.toBeTruthy();
+  });
+
+  test('Expected false for Object', () => {
+    expect(isString({})).not.toBeTruthy();
+  });
+
+  test('Expected false for bool', () => {
+    expect(isNumber(false)).not.toBeTruthy();
+  });
+
+  test('Expected true for number', () => {
+    expect(isNumber(123)).toBeTruthy();
   });
 });
 

@@ -12,6 +12,7 @@ export const blocks = {
   'block': { block },
   'block block--mod': { block, mods: { mod: true } },
   'block block--mod-val': { block, mods: { mod: 'val' } },
+  'block block--mod-123': { block, mods: { mod: 123 } },
   'block block--mod-val block--modbool': {
     block,
     mods: { mod: 'val', modbool: true, 'some-mod': false },
@@ -24,6 +25,7 @@ export const elements = {
   'block__elem': { block, el },
   'block__elem block__elem--mod': { block, el, mods: { mod: true } },
   'block__elem block__elem--mod-val': { block, el, mods: { mod: 'val' } },
+  'block__elem block__elem--mod-123': { block, el, mods: { mod: 123 } },
   'block__elem block__elem--mod-val block__elem--modbool': {
     block,
     el,
