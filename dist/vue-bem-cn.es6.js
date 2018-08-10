@@ -48,6 +48,7 @@ var isPObject = function isPObject(val) {
 var hyphenate = function hyphenate(str) {
   return str.replace(/\B([A-Z])/g, '-$1').toLowerCase();
 };
+// eslint-disable-next-line no-restricted-globals
 var isNumber = function isNumber(val) {
   return typeof val === 'number' && isFinite(val);
 };
