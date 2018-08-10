@@ -7,4 +7,5 @@ export const isPObject = val =>
   Object.keys(val).length > 0;
 
 export const hyphenate = str => str.replace(/\B([A-Z])/g, '-$1').toLowerCase();
+// eslint-disable-next-line no-restricted-globals
 export const isNumber = val => typeof val === 'number' && isFinite(val);
