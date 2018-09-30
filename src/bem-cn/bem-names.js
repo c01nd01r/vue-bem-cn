@@ -2,23 +2,22 @@ import { isPObject, isString, isNumber } from '../utils';
 
 /**
  * Create String from BEM entitys
- * @param {Object} entitys BEM entitys
- * @param {String} entitys.block Block
- * @param {String} [entitys.el] Element
- * @param {Object<string>} [entitys.mods] Modifiers
- * @param {String} [entitys.mixin] Mixin
+ * @param {Object} entities BEM entitys
+ * @param {String} entities.block Block
+ * @param {String} [entities.el] Element
+ * @param {Object<string>} [entities.mods] Modifiers
+ * @param {String} [entities.mixin] Mixin
  * @param {Object<string>} delimiters Delimiters for BEM entitys
  * @returns {String}
  */
-export default function bemNames(entitys, delimiters) {
-  const names = entitys || {};
-  let resultString = (delimiters.ns || '') + names.block;
+export default function bemNames(entities, delimiters) {
+  let resultString = (delimiters.ns || '') + entities.block;
 
-  if (names.el) resultString += delimiters.el + names.el;
+  if (entities.el) resultString += delimiters.el + entities.el;
 
-  if (isPObject(names.mods)) {
-    resultString += Object.keys(names.mods).reduce((prev, name) => {
-      const val = names.mods[name];
+  if (isPObject(entities.mods)) {
+    resultString += Object.keys(entities.mods).reduce((prev, name) => {
+      const val = entities.mods[name];
       /* eslint-disable no-param-reassign */
       if (val === true) {
         prev += ' ' + resultString + delimiters.mod + name;
@@ -30,5 +29,5 @@ export default function bemNames(entitys, delimiters) {
       return prev;
     }, '');
   }
-  return resultString + (isString(names.mixin) ? ' ' + names.mixin : '');
+  return resultString + (isString(entities.mixin) ? ` ${entities.mixin}` : '');
 }

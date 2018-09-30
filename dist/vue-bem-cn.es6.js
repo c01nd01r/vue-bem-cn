@@ -56,23 +56,22 @@ var isNumber = function isNumber(val) {
 
 /**
  * Create String from BEM entitys
- * @param {Object} entitys BEM entitys
- * @param {String} entitys.block Block
- * @param {String} [entitys.el] Element
- * @param {Object<string>} [entitys.mods] Modifiers
- * @param {String} [entitys.mixin] Mixin
+ * @param {Object} entities BEM entitys
+ * @param {String} entities.block Block
+ * @param {String} [entities.el] Element
+ * @param {Object<string>} [entities.mods] Modifiers
+ * @param {String} [entities.mixin] Mixin
  * @param {Object<string>} delimiters Delimiters for BEM entitys
  * @returns {String}
  */
-function bemNames(entitys, delimiters) {
-  var names = entitys || {};
-  var resultString = (delimiters.ns || '') + names.block;
+function bemNames(entities, delimiters) {
+  var resultString = (delimiters.ns || '') + entities.block;
 
-  if (names.el) resultString += delimiters.el + names.el;
+  if (entities.el) resultString += delimiters.el + entities.el;
 
-  if (isPObject(names.mods)) {
-    resultString += Object.keys(names.mods).reduce(function (prev, name) {
-      var val = names.mods[name];
+  if (isPObject(entities.mods)) {
+    resultString += Object.keys(entities.mods).reduce(function (prev, name) {
+      var val = entities.mods[name];
       /* eslint-disable no-param-reassign */
       if (val === true) {
         prev += ' ' + resultString + delimiters.mod + name;
@@ -84,7 +83,7 @@ function bemNames(entitys, delimiters) {
       return prev;
     }, '');
   }
-  return resultString + (isString(names.mixin) ? ' ' + names.mixin : '');
+  return resultString + (isString(entities.mixin) ? ' ' + entities.mixin : '');
 }
 
 function bemCn(block, options) {
