@@ -1,7 +1,7 @@
 import { isString, isPObject, hyphenate } from '../utils';
 import bemNames from './bem-names';
 
-export default function bemCn(block, options = { delimiters: {} }) {
+export default function bemCn(block, options) {
   return function entitys(elem, mods, mix) {
     const resultObj = {
       block,

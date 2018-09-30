@@ -54,18 +54,6 @@ var isNumber = function isNumber(val) {
   return typeof val === 'number' && isFinite(val);
 };
 
-var DEFAULT_DELIMITERS = {
-  ns: '',
-  el: '__',
-  mod: '--',
-  modVal: '-'
-};
-
-var DEFAULT_CONFIG = {
-  hyphenate: false,
-  methodName: 'b'
-};
-
 /**
  * Create String from BEM entitys
  * @param {Object} entitys BEM entitys
@@ -78,19 +66,18 @@ var DEFAULT_CONFIG = {
  */
 function bemNames(entitys, delimiters) {
   var names = entitys || {};
-  var delims = _extends({}, DEFAULT_DELIMITERS, delimiters);
-  var resultString = (delims.ns || '') + names.block;
+  var resultString = (delimiters.ns || '') + names.block;
 
-  if (names.el) resultString += delims.el + names.el;
+  if (names.el) resultString += delimiters.el + names.el;
 
   if (isPObject(names.mods)) {
     resultString += Object.keys(names.mods).reduce(function (prev, name) {
       var val = names.mods[name];
       /* eslint-disable no-param-reassign */
       if (val === true) {
-        prev += ' ' + resultString + delims.mod + name;
+        prev += ' ' + resultString + delimiters.mod + name;
       } else if (isString(val) || isNumber(val)) {
-        prev += ' ' + resultString + delims.mod + name + delims.modVal + val;
+        prev += ' ' + resultString + delimiters.mod + name + delimiters.modVal + val;
       }
       /* eslint-enable no-param-reassign */
 
@@ -100,9 +87,7 @@ function bemNames(entitys, delimiters) {
   return resultString + (isString(names.mixin) ? ' ' + names.mixin : '');
 }
 
-function bemCn(block) {
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { delimiters: {} };
-
+function bemCn(block, options) {
   return function entitys(elem, mods, mix) {
     var resultObj = {
       block: block,
@@ -132,6 +117,18 @@ function bemCn(block) {
     return options.hyphenate ? hyphenate(bemClasses) : bemClasses;
   };
 }
+
+var DEFAULT_DELIMITERS = {
+  ns: '',
+  el: '__',
+  mod: '--',
+  modVal: '-'
+};
+
+var DEFAULT_CONFIG = {
+  hyphenate: false,
+  methodName: 'b'
+};
 
 var vuePlugin = {
   install: function install(Vue) {

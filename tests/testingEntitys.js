@@ -55,12 +55,3 @@ export const delimitersTest = {
 export const hyphenate = {
   'block block--has-mod': { block, mods: { hasMod: true } },
 };
-
-export default {
-  block,
-  el,
-  blocks,
-  elements,
-  delimiters,
-  hyphenate,
-};

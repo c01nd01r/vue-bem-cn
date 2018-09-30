@@ -1,8 +1,16 @@
 import { blocks, elements, block, delimiters, delimitersTest, hyphenate } from './testingEntitys';
+import { DEFAULT_DELIMITERS, DEFAULT_CONFIG } from '../src/globals';
 import bemCn from '../src/bem-cn/index';
 
+const config = {
+  ...DEFAULT_CONFIG,
+  delimiters: {
+    ...DEFAULT_DELIMITERS,
+  },
+};
+
 describe('Block', () => {
-  const b = bemCn(block);
+  const b = bemCn(block, config);
   Object.keys(blocks).forEach((item) => {
     test(item, () => {
       expect(b(blocks[item].mods, blocks[item].mixin)).toBe(item);
@@ -16,7 +24,7 @@ describe('Block', () => {
 });
 
 describe('Elements', () => {
-  const b = bemCn(block);
+  const b = bemCn(block, config);
 
   Object.keys(elements).forEach((item) => {
     test(item, () => {
@@ -26,7 +34,7 @@ describe('Elements', () => {
 });
 
 describe('Delimiters', () => {
-  const b = bemCn(block, { delimiters });
+  const b = bemCn(block, { ...config, delimiters });
 
   Object.keys(delimitersTest).forEach((item) => {
     test(item, () => {
@@ -36,7 +44,7 @@ describe('Delimiters', () => {
 });
 
 describe('Hyphenate', () => {
-  const b = bemCn(block, { hyphenate: true });
+  const b = bemCn(block, { ...config, hyphenate: true });
 
   Object.keys(hyphenate).forEach((item) => {
     test(item, () => {
