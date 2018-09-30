@@ -1,4 +1,5 @@
 import { isPObject, isString, isNumber } from '../utils';
+import { DEFAULT_DELIMITERS } from '../globals';
 
 /**
  * Create String from BEM entitys
@@ -11,19 +12,12 @@ import { isPObject, isString, isNumber } from '../utils';
  * @returns {String}
  */
 export default function bemNames(entitys, delimiters) {
-  let resultString = '';
-  const names = entitys || { mods: {}, mixin: '' };
+  const names = entitys || {};
   const delims = {
-    ns: '',
-    el: '__',
-    mod: '--',
-    modVal: '-',
+    ...DEFAULT_DELIMITERS,
     ...delimiters,
   };
-  const mixin = isString(names.mixin) ? ' ' + names.mixin : '';
-
-  if (!names.block) return '';
-  resultString = delims.ns ? delims.ns + names.block : names.block;
+  let resultString = (delims.ns || '') + names.block;
 
   if (names.el) resultString += delims.el + names.el;
 
@@ -34,12 +28,12 @@ export default function bemNames(entitys, delimiters) {
       if (val === true) {
         prev += ' ' + resultString + delims.mod + name;
       } else if (isString(val) || isNumber(val)) {
-        prev += ' ' + resultString + delims.mod + name + delims.modVal + names.mods[name];
+        prev += ' ' + resultString + delims.mod + name + delims.modVal + val;
       }
       /* eslint-enable no-param-reassign */
 
       return prev;
     }, '');
   }
-  return resultString + mixin;
+  return resultString + (isString(names.mixin) ? ' ' + names.mixin : '');
 }

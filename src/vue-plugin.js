@@ -1,16 +1,14 @@
 import bemCn from './bem-cn/index';
+import { DEFAULT_DELIMITERS, DEFAULT_CONFIG } from './globals';
+import { isString } from './utils';
 
 export default {
   install(Vue, config = { delimiters: {} }) {
     const cfg = {
-      hyphenate: false,
-      methodName: 'b',
+      ...DEFAULT_CONFIG,
       ...config,
       delimiters: {
-        ns: '',
-        el: '__',
-        mod: '--',
-        modVal: '-',
+        ...DEFAULT_DELIMITERS,
         ...config.delimiters,
       },
     };
@@ -20,7 +18,7 @@ export default {
         const block = this.$options.block || this.$options.name;
         let generator = null;
 
-        if (typeof block !== 'string') return;
+        if (!isString(block)) return;
 
         generator = bemCn(block, cfg);
         this[cfg.methodName] = (...args) => generator(...args);
