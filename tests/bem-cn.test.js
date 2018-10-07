@@ -34,7 +34,7 @@ describe('Elements', () => {
 });
 
 describe('Delimiters', () => {
-  const b = bemCn(block, { ...config, delimiters });
+  const b = bemCn(delimiters.ns + block, { ...config, delimiters });
 
   Object.keys(delimitersTest).forEach((item) => {
     test(item, () => {

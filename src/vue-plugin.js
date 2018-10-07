@@ -20,7 +20,8 @@ export default {
 
         if (!isString(block)) return;
 
-        generator = bemCn(block, cfg);
+        generator = bemCn(cfg.delimiters.ns + block, cfg);
+
         this[cfg.methodName] = (...args) => generator(...args);
       },
     });

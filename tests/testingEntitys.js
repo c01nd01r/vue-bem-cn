@@ -42,7 +42,7 @@ export const elements = {
 
 export const delimitersTest = {
   'ns**block++elem ns**block++elem==mod~val ns**block++elem==modbool': {
-    block,
+    block: delimiters.ns + block,
     el,
     mods: {
       mod: 'val',

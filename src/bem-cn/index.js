@@ -2,13 +2,17 @@ import { isString, isPObject, hyphenate } from '../utils';
 import bemNames from './bem-names';
 
 export default function bemCn(block, options) {
-  return function entitys(elem, mods, mix) {
+  return function entities(elem, mods, mix) {
     const resultObj = {
       block,
       el: '',
       mods: {},
       mixin: '',
     };
+
+    if (!elem && !mods && !mix) {
+      return block;
+    }
 
     if (isPObject(mods)) {
       resultObj.mods = mods;
@@ -23,7 +27,7 @@ export default function bemCn(block, options) {
     }
 
     if (isString(mix)) {
-      resultObj.mixin += resultObj.mixin.length ? ` ${mix}` : mix;
+      resultObj.mixin += resultObj.mixin ? ` ${mix}` : mix;
     }
 
     const bemClasses = bemNames(resultObj, options.delimiters);

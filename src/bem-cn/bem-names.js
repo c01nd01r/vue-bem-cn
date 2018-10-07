@@ -1,4 +1,4 @@
-import { isPObject, isString, isNumber } from '../utils';
+import { isString, isNumber } from '../utils';
 
 /**
  * Create String from BEM entitys
@@ -11,11 +11,11 @@ import { isPObject, isString, isNumber } from '../utils';
  * @returns {String}
  */
 export default function bemNames(entities, delimiters) {
-  let resultString = (delimiters.ns || '') + entities.block;
+  let resultString = entities.block;
 
   if (entities.el) resultString += delimiters.el + entities.el;
 
-  if (isPObject(entities.mods)) {
+  if (entities.mods) {
     resultString += Object.keys(entities.mods).reduce((prev, name) => {
       const val = entities.mods[name];
       /* eslint-disable no-param-reassign */
@@ -29,5 +29,6 @@ export default function bemNames(entities, delimiters) {
       return prev;
     }, '');
   }
-  return resultString + (isString(entities.mixin) ? ` ${entities.mixin}` : '');
+
+  return resultString + (entities.mixin ? ` ${entities.mixin}` : '');
 }

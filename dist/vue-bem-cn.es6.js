@@ -65,11 +65,11 @@ var isNumber = function isNumber(val) {
  * @returns {String}
  */
 function bemNames(entities, delimiters) {
-  var resultString = (delimiters.ns || '') + entities.block;
+  var resultString = entities.block;
 
   if (entities.el) resultString += delimiters.el + entities.el;
 
-  if (isPObject(entities.mods)) {
+  if (entities.mods) {
     resultString += Object.keys(entities.mods).reduce(function (prev, name) {
       var val = entities.mods[name];
       /* eslint-disable no-param-reassign */
@@ -83,17 +83,22 @@ function bemNames(entities, delimiters) {
       return prev;
     }, '');
   }
-  return resultString + (isString(entities.mixin) ? ' ' + entities.mixin : '');
+
+  return resultString + (entities.mixin ? ' ' + entities.mixin : '');
 }
 
 function bemCn(block, options) {
-  return function entitys(elem, mods, mix) {
+  return function entities(elem, mods, mix) {
     var resultObj = {
       block: block,
       el: '',
       mods: {},
       mixin: ''
     };
+
+    if (!elem && !mods && !mix) {
+      return block;
+    }
 
     if (isPObject(mods)) {
       resultObj.mods = mods;
@@ -108,7 +113,7 @@ function bemCn(block, options) {
     }
 
     if (isString(mix)) {
-      resultObj.mixin += resultObj.mixin.length ? ' ' + mix : mix;
+      resultObj.mixin += resultObj.mixin ? ' ' + mix : mix;
     }
 
     var bemClasses = bemNames(resultObj, options.delimiters);
@@ -144,7 +149,8 @@ var vuePlugin = {
 
         if (!isString(block)) return;
 
-        generator = bemCn(block, cfg);
+        generator = bemCn(cfg.delimiters.ns + block, cfg);
+
         this[cfg.methodName] = function () {
           return generator.apply(undefined, arguments);
         };
