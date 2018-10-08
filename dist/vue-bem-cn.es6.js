@@ -145,11 +145,12 @@ var vuePlugin = {
     Vue.mixin({
       created: function created() {
         var block = this.$options.block || this.$options.name;
+        var nsBlock = cfg.delimiters.ns + block;
         var generator = null;
 
         if (!isString(block)) return;
 
-        generator = bemCn(cfg.delimiters.ns + block, cfg);
+        generator = bemCn(cfg.hyphenate ? hyphenate(nsBlock) : nsBlock, cfg);
 
         this[cfg.methodName] = function () {
           return generator.apply(undefined, arguments);

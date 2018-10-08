@@ -17,9 +17,9 @@ describe('Block', () => {
     });
   });
 
-  test('block block--mod, when elem = false', () => {
+  test('BlockName BlockName--mod, when elem = false', () => {
     const val = { el: false, mods: { mod: 'val' } };
-    expect(b(val.el, val.mods)).toBe('block block--mod-val');
+    expect(b(val.el, val.mods)).toBe('BlockName BlockName--mod-val');
   });
 });
 
@@ -38,17 +38,18 @@ describe('Delimiters', () => {
 
   Object.keys(delimitersTest).forEach((item) => {
     test(item, () => {
-      expect(b(delimitersTest[item].el, delimitersTest[item].mods, delimitersTest[item].mixin)).toBe(item);
+      expect(b(delimitersTest[item].el, delimitersTest[item].mods, delimitersTest[item].mixin))
+        .toBe(item);
     });
   });
 });
 
 describe('Hyphenate', () => {
-  const b = bemCn(block, { ...config, hyphenate: true });
+  const b = bemCn('block-name', { ...config, hyphenate: true });
 
   Object.keys(hyphenate).forEach((item) => {
     test(item, () => {
-      expect(b(hyphenate[item].mods)).toBe(item);
+      expect(b(hyphenate[item].mods || hyphenate[item].el)).toBe(item);
     });
   });
 });

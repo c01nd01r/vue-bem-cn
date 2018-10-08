@@ -48,8 +48,8 @@ describe('Check vm.b() method', () => {
 });
 
 describe('Check custom settings', () => {
-  const block = 'block';
-  const elem = 'elem';
+  const block = 'BlockName';
+  const elem = 'elementName';
   const mods = {
     hasMod: true,
     mod: 'val',
@@ -74,7 +74,7 @@ describe('Check custom settings', () => {
 
   test('Expect corrent string for custom delimiters', () => {
     const localVue = createLocalVue();
-    const expectedString = 'ns-block+elem ns-block+elem==hasMod ns-block+elem==mod__val';
+    const expectedString = `ns-${block}+${elem} ns-${block}+${elem}==hasMod ns-${block}+${elem}==mod__val`;
     const config = {
       delimiters: {
         ns: 'ns-',
@@ -90,9 +90,35 @@ describe('Check custom settings', () => {
     expect(vm.b(elem, mods)).toBe(expectedString);
   });
 
-  test('Expect corrent string for hyphenate option', () => {
+  test('Expect correct block string for hyphenate option and early exit (no arguments)', () => {
     const localVue = createLocalVue();
-    const expectedString = 'block__elem block__elem--has-mod block__elem--mod-val';
+    const expectedString = 'block-name';
+    const config = {
+      hyphenate: true,
+    };
+
+    localVue.use(vueBemCn, config);
+    const { vm } = mount(comp, { localVue });
+
+    expect(vm.b()).toBe(expectedString);
+  });
+
+  test('Expect correct block string for hyphenate option with mods', () => {
+    const localVue = createLocalVue();
+    const expectedString = 'block-name block-name--has-mod block-name--mod-val';
+    const config = {
+      hyphenate: true,
+    };
+
+    localVue.use(vueBemCn, config);
+    const { vm } = mount(comp, { localVue });
+
+    expect(vm.b(mods)).toBe(expectedString);
+  });
+
+  test('Expect correct element string for hyphenate option', () => {
+    const localVue = createLocalVue();
+    const expectedString = 'block-name__element-name block-name__element-name--has-mod block-name__element-name--mod-val';
     const config = {
       hyphenate: true,
     };
