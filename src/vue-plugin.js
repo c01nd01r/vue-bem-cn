@@ -1,16 +1,14 @@
 import bemCn from './bem-cn/index';
+import { DEFAULT_DELIMITERS, DEFAULT_CONFIG } from './globals';
+import { hyphenate, isString } from './utils';
 
 export default {
   install(Vue, config = { delimiters: {} }) {
     const cfg = {
-      hyphenate: false,
-      methodName: 'b',
+      ...DEFAULT_CONFIG,
       ...config,
       delimiters: {
-        ns: '',
-        el: '__',
-        mod: '--',
-        modVal: '-',
+        ...DEFAULT_DELIMITERS,
         ...config.delimiters,
       },
     };
@@ -18,11 +16,13 @@ export default {
     Vue.mixin({
       created() {
         const block = this.$options.block || this.$options.name;
+        const nsBlock = cfg.delimiters.ns + block;
         let generator = null;
 
-        if (typeof block !== 'string') return;
+        if (!isString(block)) return;
 
-        generator = bemCn(block, cfg);
+        generator = bemCn(cfg.hyphenate ? hyphenate(nsBlock) : nsBlock, cfg);
+
         this[cfg.methodName] = (...args) => generator(...args);
       },
     });

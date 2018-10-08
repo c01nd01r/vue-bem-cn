@@ -39,15 +39,16 @@ var _extends = Object.assign || function (target) {
 };
 
 var isString = function isString(val) {
-  return val && typeof val === 'string' && val.length > 0;
+  return val && typeof val === 'string';
 };
 var isPObject = function isPObject(val) {
-  return val && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && val !== null && val.constructor === Object && Object.keys(val).length > 0;
+  return !!(val && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && val.constructor === Object && Object.keys(val).length);
 };
 
 var hyphenate = function hyphenate(str) {
   return str.replace(/\B([A-Z])/g, '-$1').toLowerCase();
 };
+
 // eslint-disable-next-line no-restricted-globals
 var isNumber = function isNumber(val) {
   return typeof val === 'number' && isFinite(val);
@@ -55,58 +56,39 @@ var isNumber = function isNumber(val) {
 
 /**
  * Create String from BEM entitys
- * @param {Object} entitys BEM entitys
- * @param {String} entitys.block Block
- * @param {String} [entitys.el] Element
- * @param {Object<string>} [entitys.mods] Modifiers
- * @param {String} [entitys.mixin] Mixin
+ * @param {Object} entities BEM entitys
+ * @param {String} entities.block Block
+ * @param {String} [entities.el] Element
+ * @param {Object<string>} [entities.mods] Modifiers
+ * @param {String} [entities.mixin] Mixin
  * @param {Object<string>} delimiters Delimiters for BEM entitys
  * @returns {String}
  */
-function bemNames(entitys, delimiters) {
-  var resultString = '';
-  var names = entitys || { mods: {}, mixin: '' };
-  var delims = _extends({
-    ns: '',
-    el: '__',
-    mod: '--',
-    modVal: '-'
-  }, delimiters);
-  var mixin = isString(names.mixin) ? ' ' + names.mixin : '';
+function bemNames(entities, delimiters) {
+  var resultString = entities.block;
 
-  if (!names.block) return '';
-  resultString = delims.ns ? delims.ns + names.block : names.block;
+  if (entities.el) resultString += delimiters.el + entities.el;
 
-  if (names.el) resultString += delims.el + names.el;
-
-  if (isPObject(names.mods)) {
-    resultString += Object.keys(names.mods).reduce(function (prev, name) {
-      var val = names.mods[name];
+  if (entities.mods) {
+    resultString += Object.keys(entities.mods).reduce(function (prev, name) {
+      var val = entities.mods[name];
       /* eslint-disable no-param-reassign */
       if (val === true) {
-        prev += ' ' + resultString + delims.mod + name;
+        prev += ' ' + resultString + delimiters.mod + name;
       } else if (isString(val) || isNumber(val)) {
-        prev += ' ' + resultString + delims.mod + name + delims.modVal + names.mods[name];
+        prev += ' ' + resultString + delimiters.mod + name + delimiters.modVal + val;
       }
       /* eslint-enable no-param-reassign */
 
       return prev;
     }, '');
   }
-  return resultString + mixin;
+
+  return resultString + (entities.mixin ? ' ' + entities.mixin : '');
 }
 
-function bemCn(block) {
-  var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { delimiters: {} };
-
-  var options = _extends({
-    hyphenate: false
-  }, opt, {
-    delimiters: _extends({}, opt.delimiters)
-  });
-  if (!isString(block)) return '';
-
-  return function entitys(elem, mods, mix) {
+function bemCn(block, options) {
+  return function entities(elem, mods, mix) {
     var resultObj = {
       block: block,
       el: '',
@@ -114,7 +96,15 @@ function bemCn(block) {
       mixin: ''
     };
 
-    if (isPObject(mods)) resultObj.mods = mods;
+    if (!elem && !mods && !mix) {
+      return block;
+    }
+
+    if (isPObject(mods)) {
+      resultObj.mods = mods;
+    } else if (isString(mods)) {
+      resultObj.mixin += mods;
+    }
 
     if (isString(elem)) {
       resultObj.el = elem;
@@ -122,45 +112,46 @@ function bemCn(block) {
       resultObj.mods = elem;
     }
 
-    if (isString(mods)) {
-      resultObj.mixin = resultObj.mixin.length > 0 ? resultObj.mixin + ' ' + mods : resultObj.mixin + mods;
-    }
     if (isString(mix)) {
-      resultObj.mixin = resultObj.mixin.length > 0 ? resultObj.mixin + ' ' + mix : resultObj.mixin + mix;
+      resultObj.mixin += resultObj.mixin ? ' ' + mix : mix;
     }
 
-    if (options.hyphenate) {
-      return hyphenate(bemNames(resultObj, options.delimiters));
-    }
+    var bemClasses = bemNames(resultObj, options.delimiters);
 
-    return bemNames(resultObj, options.delimiters);
+    return options.hyphenate ? hyphenate(bemClasses) : bemClasses;
   };
 }
+
+var DEFAULT_DELIMITERS = {
+  ns: '',
+  el: '__',
+  mod: '--',
+  modVal: '-'
+};
+
+var DEFAULT_CONFIG = {
+  hyphenate: false,
+  methodName: 'b'
+};
 
 var vuePlugin = {
   install: function install(Vue) {
     var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { delimiters: {} };
 
-    var cfg = _extends({
-      hyphenate: false,
-      methodName: 'b'
-    }, config, {
-      delimiters: _extends({
-        ns: '',
-        el: '__',
-        mod: '--',
-        modVal: '-'
-      }, config.delimiters)
+    var cfg = _extends({}, DEFAULT_CONFIG, config, {
+      delimiters: _extends({}, DEFAULT_DELIMITERS, config.delimiters)
     });
 
     Vue.mixin({
       created: function created() {
         var block = this.$options.block || this.$options.name;
+        var nsBlock = cfg.delimiters.ns + block;
         var generator = null;
 
-        if (typeof block !== 'string') return;
+        if (!isString(block)) return;
 
-        generator = bemCn(block, cfg);
+        generator = bemCn(cfg.hyphenate ? hyphenate(nsBlock) : nsBlock, cfg);
+
         this[cfg.methodName] = function () {
           return generator.apply(undefined, arguments);
         };

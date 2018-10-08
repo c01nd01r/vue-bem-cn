@@ -1,45 +1,34 @@
-import { isPObject, isString, isNumber } from '../utils';
+import { isString, isNumber } from '../utils';
 
 /**
  * Create String from BEM entitys
- * @param {Object} entitys BEM entitys
- * @param {String} entitys.block Block
- * @param {String} [entitys.el] Element
- * @param {Object<string>} [entitys.mods] Modifiers
- * @param {String} [entitys.mixin] Mixin
+ * @param {Object} entities BEM entitys
+ * @param {String} entities.block Block
+ * @param {String} [entities.el] Element
+ * @param {Object<string>} [entities.mods] Modifiers
+ * @param {String} [entities.mixin] Mixin
  * @param {Object<string>} delimiters Delimiters for BEM entitys
  * @returns {String}
  */
-export default function bemNames(entitys, delimiters) {
-  let resultString = '';
-  const names = entitys || { mods: {}, mixin: '' };
-  const delims = {
-    ns: '',
-    el: '__',
-    mod: '--',
-    modVal: '-',
-    ...delimiters,
-  };
-  const mixin = isString(names.mixin) ? ' ' + names.mixin : '';
+export default function bemNames(entities, delimiters) {
+  let resultString = entities.block;
 
-  if (!names.block) return '';
-  resultString = delims.ns ? delims.ns + names.block : names.block;
+  if (entities.el) resultString += delimiters.el + entities.el;
 
-  if (names.el) resultString += delims.el + names.el;
-
-  if (isPObject(names.mods)) {
-    resultString += Object.keys(names.mods).reduce((prev, name) => {
-      const val = names.mods[name];
+  if (entities.mods) {
+    resultString += Object.keys(entities.mods).reduce((prev, name) => {
+      const val = entities.mods[name];
       /* eslint-disable no-param-reassign */
       if (val === true) {
-        prev += ' ' + resultString + delims.mod + name;
+        prev += ' ' + resultString + delimiters.mod + name;
       } else if (isString(val) || isNumber(val)) {
-        prev += ' ' + resultString + delims.mod + name + delims.modVal + names.mods[name];
+        prev += ' ' + resultString + delimiters.mod + name + delimiters.modVal + val;
       }
       /* eslint-enable no-param-reassign */
 
       return prev;
     }, '');
   }
-  return resultString + mixin;
+
+  return resultString + (entities.mixin ? ` ${entities.mixin}` : '');
 }

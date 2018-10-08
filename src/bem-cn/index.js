@@ -1,17 +1,8 @@
 import { isString, isPObject, hyphenate } from '../utils';
 import bemNames from './bem-names';
 
-export default function bemCn(block, opt = { delimiters: {} }) {
-  const options = {
-    hyphenate: false,
-    ...opt,
-    delimiters: {
-      ...opt.delimiters,
-    },
-  };
-  if (!isString(block)) return '';
-
-  return function entitys(elem, mods, mix) {
+export default function bemCn(block, options) {
+  return function entities(elem, mods, mix) {
     const resultObj = {
       block,
       el: '',
@@ -19,7 +10,15 @@ export default function bemCn(block, opt = { delimiters: {} }) {
       mixin: '',
     };
 
-    if (isPObject(mods)) resultObj.mods = mods;
+    if (!elem && !mods && !mix) {
+      return block;
+    }
+
+    if (isPObject(mods)) {
+      resultObj.mods = mods;
+    } else if (isString(mods)) {
+      resultObj.mixin += mods;
+    }
 
     if (isString(elem)) {
       resultObj.el = elem;
@@ -27,19 +26,14 @@ export default function bemCn(block, opt = { delimiters: {} }) {
       resultObj.mods = elem;
     }
 
-    if (isString(mods)) {
-      resultObj.mixin =
-        resultObj.mixin.length > 0 ? `${resultObj.mixin} ${mods}` : resultObj.mixin + mods;
-    }
     if (isString(mix)) {
-      resultObj.mixin =
-        resultObj.mixin.length > 0 ? `${resultObj.mixin} ${mix}` : resultObj.mixin + mix;
+      resultObj.mixin += resultObj.mixin ? ` ${mix}` : mix;
     }
 
-    if (options.hyphenate) {
-      return hyphenate(bemNames(resultObj, options.delimiters));
-    }
+    const bemClasses = bemNames(resultObj, options.delimiters);
 
-    return bemNames(resultObj, options.delimiters);
+    return options.hyphenate
+      ? hyphenate(bemClasses)
+      : bemClasses;
   };
 }
